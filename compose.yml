@@ -1,21 +1,14 @@
 services:
   web:
-    build: ./app
-    ports:
-      - "8081:8000"
+    image: ghcr.io/henddraal29/devops-l2:latest
+    ports: ["8081:8000"]
     environment:
       DB_HOST: db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: secret
       POSTGRES_DB: appdb
     depends_on:
-      db:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:8000/').read()"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
+      db: { condition: service_healthy }
     restart: unless-stopped
 
   db:
